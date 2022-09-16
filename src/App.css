@@ -36,3 +36,44 @@
     transform: rotate(360deg);
   }
 }
+
+.content {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+main {
+  flex: 1 0 auto;
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-my {
+  width: 200px;
+  margin-bottom: 50px;
+}
+
+button.btn {
+  margin: 10px 5px;
+}
+
+.toast-success {
+  background-color: #26a69a !important;
+}
+
+.toast-error {
+  background-color: #e57373 !important;
+}
+
+.card .card-title {
+  font-weight: 800;
+}
+
+input[type=number] {
+  text-align: center;
+  font-weight: 600;
+  font-size: 30px !important;
+}

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weight</title>
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <style>
+        body {
+            display: flex;
+            min-height: 100vh;
+            flex-direction: column;
+        }
+
+        main {
+            flex: 1 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }        
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="nav-wrapper">
+                <a href="#" class="brand-logo center">
+                    <i class="large material-icons">cake</i>
+                    WEIGHT
+                </a>
+            </div>
+        </nav>        
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="row">
+                <div class="col s12">
+                    <h1 class="center-align red-text">90.5</h1>
+                </div>
+            </div>
+            <div class="row">
+                <form class="col s6 m2 offset-s3 offset-m5">
+                    <div class="row">
+                        <div class="input-field">
+                            <input id="last_name" type="text" class="validate center" style="font-size: 3rem;">
+                            <label for="last_name">Weight</label>
+                        </div>
+                        <div class="center">
+                            <button class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons">add</i></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="row">
+                <div class="col s12">
+                    <h1 class="center-align green-text">88.7</h1>
+                </div>
+            </div>    
+        </div>
+    </main>
+
+    <footer class="page-footer">
+        <div class="footer-copyright">
+            <div class="container center">
+                © 2022 mspuz dev
+            </div>
+        </div>
+    </footer>
+
+    <div class="fixed-action-btn">
+        <a class="btn-floating btn-large red">
+          <i class="large material-icons">menu</i>
+        </a>
+        <ul>
+          <li><a class="btn-floating red"><i class="material-icons">cake</i></a></li>
+          <li><a class="btn-floating yellow darken-1"><i class="material-icons">format_quote</i></a></li>
+          <li><a class="btn-floating green"><i class="material-icons">publish</i></a></li>
+          <li><a class="btn-floating blue"><i class="material-icons">attach_file</i></a></li>
+        </ul>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var elems = document.querySelectorAll('.fixed-action-btn');
+            var instances = M.FloatingActionButton.init(elems, {
+            hoverEnabled: false
+            });
+        });    
+    </script>
+</body>
+</html>
