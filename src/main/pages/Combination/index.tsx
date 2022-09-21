@@ -11,9 +11,9 @@ const MakeCombination: React.FC = () => {
     const {getCurrentAccount} = useContext(AccountContext)
     const {exerciseId} = useParams()
     if (getCurrentAccount) {
-        const {access} = getCurrentAccount()
+        const {access, refresh} = getCurrentAccount()
         const validationComposite = makeCombinationValidation()
-        const remoteCombinations = makeCombination(access, Number(exerciseId))
+        const remoteCombinations = makeCombination(access, Number(exerciseId), refresh)
 
         return (
             <Combination

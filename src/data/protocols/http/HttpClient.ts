@@ -17,12 +17,21 @@ export interface HttpHeader {
 interface HttpHeaderContent {
     'Content-type': string
     Authorization: string
+    refresh?: string
 }
 
 export type HttpMethod = 'post' | 'get' | 'put' | 'delete'
 
 export interface IHttpClient<R = any> {
     request: (data: HttpRequest) => Promise<HttpResponse<R>>
+}
+
+export interface HttpJWTRefresh {
+    exp: number
+    iat: number
+    jti: string
+    token_type: string
+    user_id: number
 }
 
 export enum HttpStatusCode {

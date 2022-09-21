@@ -9,8 +9,8 @@ const MakeWeight: React.FC = () => {
     const { getCurrentAccount } = useContext(AccountContext)
 
     if (getCurrentAccount) {
-        const { access } = getCurrentAccount()
-        const remoteWeight = makeWeight(access)
+        const { access, refresh } = getCurrentAccount()
+        const remoteWeight = makeWeight(access, refresh)
         const validationComposite = makeWeightValidation()
 
         return (

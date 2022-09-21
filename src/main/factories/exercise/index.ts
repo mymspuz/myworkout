@@ -2,10 +2,10 @@ import {RemoteExercise} from '../../../data/exercise'
 import {makeApiUrl, makeAxiosHttpClient, makeHeaderAuthorization} from '../http'
 import {URL_EXERCISES} from '../../../config'
 
-export const makeExercise = (token: string): RemoteExercise => {
+export const makeExercise = (token: string, refresh: string): RemoteExercise => {
     return new RemoteExercise(
         makeApiUrl(URL_EXERCISES),
         makeAxiosHttpClient(),
-        makeHeaderAuthorization(token)
+        makeHeaderAuthorization(token, refresh)
     )
 }

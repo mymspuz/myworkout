@@ -9,8 +9,8 @@ const MakeMain: React.FC = () => {
 
     if (getCurrentAccount) {
 
-        const { access } = getCurrentAccount()
-        const remoteExercise = makeExercise(access)
+        const { access, refresh } = getCurrentAccount()
+        const remoteExercise = makeExercise(access, refresh)
 
         return (
             <Main remoteExercises={remoteExercise} />

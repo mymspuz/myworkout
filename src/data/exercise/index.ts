@@ -1,5 +1,5 @@
 import {HttpHeader, HttpStatusCode, IHttpClient} from '../protocols/http'
-import { IExercise } from '../../domain/exercise'
+import {IExercise} from '../../domain/exercise'
 import {InvalidCredentialsError, UnexpectedError} from '../../domain/errors'
 import {ExerciseModel} from '../../domain/models'
 
