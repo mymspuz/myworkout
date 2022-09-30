@@ -1,7 +1,7 @@
 import {ICombination} from '../../domain/combination'
-import {HttpHeader, HttpStatusCode, IHttpClient} from '../protocols/http';
-import {RemoteCombinationModel} from '../../domain/models';
-import {InvalidCredentialsError, UnexpectedError} from '../../domain/errors';
+import {HttpHeader, HttpStatusCode, IHttpClient} from '../protocols/http'
+import {RemoteCombinationModel} from '../../domain/models'
+import {InvalidCredentialsError, UnexpectedError} from '../../domain/errors'
 
 type addParams = {
     id: number

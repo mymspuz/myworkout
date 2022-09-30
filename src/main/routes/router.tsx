@@ -14,6 +14,7 @@ import MakeMain from '../pages/Main'
 import MakeLogout from '../pages/Logout'
 import MakeWeight from '../pages/Weight'
 import MakeCombination from '../pages/Combination'
+import MakeReport from 'main/pages/Reports'
 
 const MainRouter: React.FC = () => {
 
@@ -33,6 +34,7 @@ const MainRouter: React.FC = () => {
                         <Route path='/logout' element={<MakeLogout />} />
                         <Route path='/' element={<PrivateRoute><MakeMain /></PrivateRoute>} />
                         <Route path='/weights' element={<PrivateRoute><MakeWeight /></PrivateRoute>} />
+                        <Route path='/reports' element={<PrivateRoute><MakeReport /></PrivateRoute>} />
                         <Route path='/exercises/:exerciseId' element={<PrivateRoute><MakeCombination /></PrivateRoute>}/>
                     </Routes>
                 </BrowserRouter>

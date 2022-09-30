@@ -1,9 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import './index.css'
-import './App.css'
 import MainRouter from './main/routes/router'
 import reportWebVitals from './reportWebVitals'
+import 'index.css'
 import 'materialize-css/dist/css/materialize.min.css'
 import 'react-toastify/dist/ReactToastify.css'
 

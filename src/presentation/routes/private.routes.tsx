@@ -9,7 +9,7 @@ function PrivateRoute({ children }: { children: JSX.Element }) {
         return getCurrentAccount().access ? (
             children
         ) : (
-            <Navigate to='login' />
+            <Navigate to='/login' />
         )
     } else {
         return null

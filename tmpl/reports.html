@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main</title>
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <style>
+        body {
+            display: flex;
+            min-height: 100vh;
+            flex-direction: column;
+        }
+
+        main {
+            flex: 1 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hstat {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .btn-my {
+            width: 200px;
+            margin-bottom: 50px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="nav-wrapper">
+                <a href="#" class="brand-logo center">
+                    <i class="large material-icons">home</i>
+                    MAIN
+                </a>
+            </div>
+        </nav>        
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="row">
+                <div class="col s12 m10 offset-m1 center">
+                    <ul class="collapsible popout">
+                        <li>
+                            <div class="collapsible-header">
+                                <i class="material-icons">battery_full</i>
+                                First
+                                <span class="new badge z-depth-3">100</span>
+                            </div>
+                            <div class="collapsible-body">
+                                <a class="waves-effect waves-light btn light-blue darken-2 tooltipped hstat" data-position="top" data-tooltip="All"><i class="material-icons left">equalizer</i>1200</a>
+                                <a class="waves-effect waves-light btn-large yellow darken-1 tooltipped hstat" data-position="bottom" data-tooltip="Best of month"><i class="material-icons left">flash_on</i>300</a>
+                                <a class="waves-effect waves-light btn-large yellow darken-1 tooltipped hstat" data-position="top" data-tooltip="Best of day"><i class="material-icons left">flash_on</i>101</a>
+                                <a class="waves-effect waves-light btn tooltipped hstat" data-position="bottom" data-tooltip="Current month"><i class="material-icons left">check_circle</i>50</a>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-header">
+                                <i class="material-icons">battery_alert</i>
+                                Second
+                                <span class="new badge z-depth-3 deep-orange darken-4">0</span>
+                            </div>
+                            <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+                        </li>
+                        <li>
+                            <div class="collapsible-header">
+                                <i class="material-icons">battery_charging_full</i>
+                                Third
+                                <span class="new badge z-depth-3 yellow accent-4">50</span>
+                            </div>
+                            <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="page-footer">
+        <div class="footer-copyright">
+            <div class="container center">
+                © 2022 mspuz dev
+            </div>
+        </div>
+    </footer>
+
+    <div class="fixed-action-btn">
+        <a class="btn-floating btn-large red">
+          <i class="large material-icons">menu</i>
+        </a>
+        <ul>
+          <li><a class="btn-floating red"><i class="material-icons">cake</i></a></li>
+          <li><a class="btn-floating yellow darken-1"><i class="material-icons">format_quote</i></a></li>
+          <li><a class="btn-floating green"><i class="material-icons">publish</i></a></li>
+          <li><a class="btn-floating blue"><i class="material-icons">attach_file</i></a></li>
+        </ul>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var elems = document.querySelectorAll('.fixed-action-btn');
+            var instances = M.FloatingActionButton.init(elems, {
+            direction: 'left',
+            hoverEnabled: false
+            });
+        });
+        document.addEventListener('DOMContentLoaded', function() {
+            var elems = document.querySelectorAll('.collapsible');
+            var instances = M.Collapsible.init(elems);
+        });
+        document.addEventListener('DOMContentLoaded', function() {
+            var elems = document.querySelectorAll('.tooltipped');
+            var instances = M.Tooltip.init(elems);
+        });
+    </script>
+</body>
+</html>
