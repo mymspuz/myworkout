@@ -43,3 +43,17 @@ input[type=number] {
     font-size: 18px;
     font-weight: bold;
 }
+
+.collection .collection-item.avatar:not(.circle-clipper)>.circle {
+    top: 24px;
+}
+
+.collection .collection-item.avatar .third-content {
+    position: absolute;
+    right: 75px;
+}
+
+.collection .collection-item.avatar .secondary-content,
+.collection .collection-item.avatar .third-content {
+    top: 24px!important;
+}

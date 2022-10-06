@@ -1,9 +1,9 @@
-import {CombinationContext, FormContext} from '../../hooks';
-import {ButtonSubmit, FormLoaderStatus, Input} from '../index';
-import React, {useContext, useEffect, useState} from 'react';
-import {IValidation} from '../../protocols/validation';
-import {toast} from 'react-toastify';
-import {RemoteCombination} from '../../../data/combination';
+import { CombinationContext, FormContext } from 'presentation/hooks'
+import { ButtonSubmit, FormLoaderStatus, Input } from 'presentation/components'
+import React, { useContext, useEffect, useState } from 'react'
+import { IValidation } from 'presentation/protocols/validation'
+import { toast } from 'react-toastify'
+import { RemoteCombination } from 'data/combination'
 
 type FormCombinationsProps = {
     validation: IValidation

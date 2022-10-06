@@ -1,5 +1,5 @@
 import React, {useContext, useState} from 'react'
-import {FormContext} from '../../../presentation/hooks'
+import { FormContext } from 'presentation/hooks'
 
 interface IInputProps
     extends React.DetailedHTMLProps<
@@ -20,6 +20,12 @@ const Input: React.FC<IInputProps> = (props: IInputProps) => {
     const enableInput = (event: React.FocusEvent<HTMLInputElement>): void => {
         event.target.readOnly = false
         setIsActiveFocus(true)
+        console.log('focus-on date')
+    }
+
+    const disableInput = (event: React.FocusEvent<HTMLInputElement>): void => {
+        event.target.readOnly = false
+        setIsActiveFocus(false)
     }
 
     const handleInputChange = (event: React.FocusEvent<HTMLInputElement>): void => {
@@ -35,7 +41,7 @@ const Input: React.FC<IInputProps> = (props: IInputProps) => {
                 readOnly
                 onFocus={enableInput}
                 onChange={handleInputChange}
-                onBlur={() => setIsActiveFocus(false)}
+                onBlur={disableInput}
                 placeholder=''
             />
             <label htmlFor={props.name}>{props.title}</label>

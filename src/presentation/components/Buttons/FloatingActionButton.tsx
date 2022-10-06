@@ -20,7 +20,7 @@ const FloatingActionButton: React.FC = () => {
             <ul>
                 <li><Link to='/weights' className="btn-floating red"><i className="material-icons">cake</i></Link></li>
                 <li><Link to='/reports' className="btn-floating yellow darken-1"><i className="material-icons">insert_chart</i></Link></li>
-                <li><Link to='/' className="btn-floating green"><i className="material-icons">view_comfy</i></Link></li>
+                <li><Link to='/history' className="btn-floating green"><i className="material-icons">view_comfy</i></Link></li>
                 <li><Link to='/logout' className="btn-floating blue"><i className="material-icons">account_circle</i></Link></li>
             </ul>
         </div>
