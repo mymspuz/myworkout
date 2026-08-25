@@ -1,0 +1,93 @@
+from django.contrib.auth.models import User
+from rest_framework import serializers
+from rest_framework_simplejwt.tokens import RefreshToken
+
+from .models import *
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'is_staff']
+
+
+class UserSerializerWithToken(UserSerializer):
+    token = serializers.SerializerMethodField(read_only=True)
+
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'is_staff', 'token']
+
+    def get_token(self, obj):
+        token = RefreshToken.for_user(obj)
+        return str(token.access_token)
+
+
+class ExercisesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Exercises
+        fields = ['id', 'name']
+
+
+class CombinationsSerializer(serializers.ModelSerializer):
+    exercise = serializers.StringRelatedField(many=False)
+    grip = serializers.StringRelatedField(many=False)
+    arm_width = serializers.StringRelatedField(many=False)
+    equipment = serializers.StringRelatedField(many=False)
+
+    class Meta:
+        model = Combinations
+        fields = ['id', 'exercise', 'grip', 'arm_width', 'equipment']
+
+
+class WeightSerializer(serializers.ModelSerializer):
+    weight_date = serializers.StringRelatedField(many=False)
+    weight_value = serializers.StringRelatedField(many=False)
+
+    class Meta:
+        model = Weight
+        fields = ['weight_date', 'weight_value']
+
+
+class WeightRangeSerializer(serializers.ModelSerializer):
+    weight_min = serializers.FloatField()
+    weight_max = serializers.FloatField()
+
+    class Meta:
+        model = Weight
+        fields = ['weight_min', 'weight_max']
+
+
+class ReportCurrentDaySerializer(serializers.ModelSerializer):
+    total = serializers.IntegerField()
+
+    class Meta:
+        model = Exercises
+        fields = ['id', 'name', 'total']
+
+
+class HistorySerializer(serializers.ModelSerializer):
+    combination = serializers.SerializerMethodField(read_only=False)
+    value = serializers.IntegerField(source='approach_value')
+    weight = serializers.FloatField(source='approach_weight')
+    date = serializers.SerializerMethodField(read_only=False)
+    visible = serializers.SerializerMethodField(read_only=False)
+
+    class Meta:
+        model = Approach
+        fields = ['id', 'date', 'value', 'weight', 'combination', 'visible']
+
+    def get_combination(self, obj):
+        return {
+            'id': obj.combination.id,
+            'exercise': {'id': obj.combination.exercise.id, 'name': obj.combination.exercise.name},
+            'grip': {'id': obj.combination.grip.id, 'name': obj.combination.grip.name},
+            'arm': {'id': obj.combination.arm_width.id, 'name': obj.combination.arm_width.name},
+            'equipment': {'id': obj.combination.equipment.id, 'name': obj.combination.equipment.name} if obj.combination.equipment else None,
+        }
+
+    def get_date(self, obj):
+        return obj.approach_date.date()
+
+    def get_visible(self, obj):
+        return True

@@ -22,3 +22,19 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# --- backend (Django) ---
+/env
+/.venv
+__pycache__/
+*.py[cod]
+
+# секреты
+.env
+
+# данные: база с личными тренировками в репозиторий не идёт
+backend/db.sqlite3
+
+# сборка фронтенда и собранная статика - получаются из исходников
+backend/frontend/
+backend/static/
