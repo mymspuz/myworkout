@@ -4,7 +4,7 @@ import {
     EmailFieldValidation,
     MinLengthValidation,
     CompareFieldsValidation,
-    NumberFieldValidation, FloatFieldValidation, MinNumberFieldValidation
+    NumberFieldValidation, FloatFieldValidation, MinNumberFieldValidation, MaxNumberFieldValidation
 } from '../../../validation/validators'
 
 export class ValidationBuilder {
@@ -49,6 +49,11 @@ export class ValidationBuilder {
 
     numericMin(value: number): ValidationBuilder {
         this.validations.push(new MinNumberFieldValidation(this.fieldName, value))
+        return this
+    }
+
+    numericMax(value: number): ValidationBuilder {
+        this.validations.push(new MaxNumberFieldValidation(this.fieldName, value))
         return this
     }
 

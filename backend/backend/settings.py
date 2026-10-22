@@ -154,7 +154,11 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+# Часовой пояс пользователя: по нему считаются "сегодня" и "текущий месяц"
+# в отчётах, целях и датах истории. В базе время по-прежнему хранится в UTC.
+# Текущую дату брать через django.utils.timezone.localdate(), не datetime.date.today():
+# последний берёт системный пояс сервера (UTC) и эту настройку не видит
+TIME_ZONE = os.environ.get('DJANGO_TIME_ZONE', 'Europe/Moscow')
 
 USE_I18N = True
 

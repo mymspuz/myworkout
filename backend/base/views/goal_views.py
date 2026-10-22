@@ -1,7 +1,7 @@
 import calendar
-import datetime
 
 from django.db.models import Sum
+from django.utils import timezone
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -15,7 +15,7 @@ from ..serializers import GoalSerializer, ExercisesSerializer
 @permission_classes([IsAuthenticated])
 def getGoals(request):
     user = request.user
-    today = datetime.date.today()
+    today = timezone.localdate()
 
     # Цель живёт только в своём месяце - прошедшие удаляем здесь, отдельная задача по расписанию не нужна
     Goal.objects \
@@ -51,7 +51,7 @@ def getGoals(request):
 def addGoal(request):
     user = request.user
     data = request.data
-    today = datetime.date.today()
+    today = timezone.localdate()
 
     try:
         value = int(data['value'])

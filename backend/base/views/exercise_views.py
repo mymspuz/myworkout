@@ -1,3 +1,4 @@
+from django.db import transaction
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -5,6 +6,10 @@ from rest_framework import status
 
 from ..models import *
 from ..serializers import ExercisesSerializer, CombinationsSerializer
+
+
+# Больше кругов за раз - почти наверняка опечатка (300 вместо 3)
+MAX_ROUNDS = 20
 
 
 @api_view(['GET'])
@@ -41,12 +46,20 @@ def addRepeats(request):
 
     try:
         combination = Combinations.objects.get(pk=data['id'])
-        Approach.objects.create(
-            combination=combination,
-            approach_value=data['repeats'],
-            approach_weight=data['weighting'],
-            user=user
-        )
-        return Response({'error': None}, status=status.HTTP_201_CREATED)
+        # Круги: одинаковые подходы подряд - по записи на каждый круг.
+        # Старые клиенты rounds не передают - это один круг
+        rounds = int(data.get('rounds', 1))
+        if not 1 <= rounds <= MAX_ROUNDS:
+            raise ValueError
+        # Все круги или ни одного: при ошибке на середине не остаётся неполного набора
+        with transaction.atomic():
+            for _ in range(rounds):
+                Approach.objects.create(
+                    combination=combination,
+                    approach_value=data['repeats'],
+                    approach_weight=data['weighting'],
+                    user=user
+                )
+        return Response({'error': None, 'created': rounds}, status=status.HTTP_201_CREATED)
     except Exception:
         return Response({'error': 'Error create.'}, status=status.HTTP_400_BAD_REQUEST)

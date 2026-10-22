@@ -7,6 +7,8 @@ type addParams = {
     id: number
     repeats: number
     weighting: number
+    // сколько одинаковых подходов записать подряд
+    rounds: number
 }
 export class RemoteCombination implements ICombination {
     constructor(

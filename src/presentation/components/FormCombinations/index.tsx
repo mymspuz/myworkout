@@ -3,6 +3,7 @@ import { ButtonSubmit, FormLoaderStatus, Input } from 'presentation/components'
 import React, { useContext, useEffect, useState } from 'react'
 import { IValidation } from 'presentation/protocols/validation'
 import { toast } from 'react-toastify'
+import M from 'materialize-css'
 import { RemoteCombination } from 'data/combination'
 
 type FormCombinationsProps = {
@@ -19,7 +20,10 @@ const FormCombinations: React.FC<FormCombinationsProps> = ({ validation, remoteC
         repeats: 0,
         repeatsError: '',
         weighting: 0,
-        weightingError: ''
+        weightingError: '',
+        // Строкой: валидатор минимума работает со строкой из поля ввода
+        rounds: '1',
+        roundsError: ''
     })
 
     const { currentCombination } = useContext(CombinationContext)
@@ -29,18 +33,27 @@ const FormCombinations: React.FC<FormCombinationsProps> = ({ validation, remoteC
     }, [currentCombination])
 
     useEffect(() => {
-        const { repeats, weighting } = state
-        const formData = { repeats, weighting }
+        const { repeats, weighting, rounds } = state
+        const formData = { repeats, weighting, rounds }
         const repeatsError = validation.validate('repeats', formData)
         const weightingError = validation.validate('weighting', formData)
+        const roundsError = validation.validate('rounds', formData)
 
         setState({
             ...state,
             repeatsError: repeatsError ? repeatsError : '',
             weightingError: weightingError ? weightingError : '',
-            isFormInvalid: !!repeatsError || !!weightingError
+            roundsError: roundsError ? roundsError : '',
+            isFormInvalid: !!repeatsError || !!weightingError || !!roundsError
         })
-    }, [state.repeats, state.weighting])
+    }, [state.repeats, state.weighting, state.rounds])
+
+    // Поле кругов заполнено сразу - поднимаем подпись, иначе она лежит поверх значения
+    useEffect(() => {
+        if (state.isVisible) {
+            M.updateTextFields()
+        }
+    }, [state.isVisible, state.rounds])
 
     useEffect(() => {
         if (state.mainError) {
@@ -56,22 +69,27 @@ const FormCombinations: React.FC<FormCombinationsProps> = ({ validation, remoteC
             }
             setState({...state, isLoading: true})
 
+            const rounds = Number(state.rounds)
             await remoteCombinations.add({
                 id: currentCombination.id,
                 repeats: state.repeats,
-                weighting: state.weighting
+                weighting: state.weighting,
+                rounds
             })
 
+            // Круги сбрасываем в 1: оставшееся 3 тихо утроило бы следующий подход
             setState({
                 ...state,
                 isLoading: false,
                 mainError: '',
                 repeatsError: '',
                 weightingError: '',
+                roundsError: '',
                 repeats: 0,
-                weighting: 0
+                weighting: 0,
+                rounds: '1'
             })
-            toast.success('Success add', {theme: 'colored'})
+            toast.success(rounds > 1 ? `Success add x${rounds}` : 'Success add', {theme: 'colored'})
         } catch (error: any) {
             setState({
                 ...state,
@@ -105,9 +123,21 @@ const FormCombinations: React.FC<FormCombinationsProps> = ({ validation, remoteC
                             className='validate center'
                             title='Weighting'
                             type='number'
+                            step='any'
                             name='weighting'
                             style={{fontSize: '3rem'}}
                             value={state.weighting ? state.weighting : ''}
+                        />
+                    </div>
+                    <div className="input-field col s4 offset-s4 m5">
+                        <Input
+                            autoComplete='off'
+                            className='validate center'
+                            title='Rounds'
+                            type='number'
+                            name='rounds'
+                            style={{fontSize: '3rem'}}
+                            value={state.rounds}
                         />
                     </div>
                     <div className="col s12 m2 center">

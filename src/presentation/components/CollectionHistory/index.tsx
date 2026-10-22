@@ -32,23 +32,25 @@ const CollectionHistory: React.FC<CollectionHistoryProps> = ({arrayApproaches, a
             )
             .map(e => {
                 return (
-                    <li key={e.id} className="collection-item avatar">
+                    <li key={e.id} className="collection-item avatar history-item">
                         <i className={"material-icons circle " + e.combination.exercise.color}>fitness_center</i>
                         <span className="title">{e.combination.exercise.name}</span>
                         <p>
                             {e.date}
                             <br />
-                            {e.combination.grip.name + ' / ' + e.combination.arm.name + ' - ' + e.value + ' / ' + e.weight}
+                            {e.combination.grip.name + ' / ' + e.combination.arm.name}
                             {e.combination.equipment && (' (' + e.combination.equipment.name + ')')}
+                            <br />
+                            <b>{e.value + ' / ' + e.weight}</b>
                         </p>
                         <button
-                            className="btn secondary-content"
+                            className="btn btn-small secondary-content"
                             onClick={() => editApproach(e)}
                         >
                             <i className="material-icons">create</i>
                         </button>
                         <button
-                            className="btn third-content red"
+                            className="btn btn-small third-content red"
                             onClick={() => removeApproach({id: e.id})}
                         >
                             <i className="material-icons">delete</i>

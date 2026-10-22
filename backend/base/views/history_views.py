@@ -1,5 +1,6 @@
 import datetime
 
+from django.utils import timezone
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -57,8 +58,10 @@ def updateApproach(request):
         approach.combination = combination
         approach.approach_value = value
         approach.approach_weight = weight
-        # Меняется только день: время подхода остаётся прежним
-        approach.approach_date = approach.approach_date.replace(year=date.year, month=date.month, day=date.day)
+        # Меняется только день, время подхода остаётся прежним. День - в местном поясе,
+        # как его показывает история: замена в UTC сдвинула бы ночные подходы на сутки
+        local = timezone.localtime(approach.approach_date)
+        approach.approach_date = local.replace(year=date.year, month=date.month, day=date.day)
         approach.save()
 
         approach = Approach.objects \

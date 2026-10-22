@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.utils import timezone
 from rest_framework import serializers
 from rest_framework_simplejwt.tokens import RefreshToken
 
@@ -93,7 +94,8 @@ class HistorySerializer(serializers.ModelSerializer):
         return history_combination(obj.combination)
 
     def get_date(self, obj):
-        return obj.approach_date.date()
+        # В базе UTC: подход в 01:00 по Москве иначе попадал бы во вчерашний день
+        return timezone.localtime(obj.approach_date).date()
 
     def get_visible(self, obj):
         return True

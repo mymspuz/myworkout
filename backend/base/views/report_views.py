@@ -1,6 +1,5 @@
-import datetime
-
 from django.db.models import Sum
+from django.utils import timezone
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -17,7 +16,7 @@ def getReportCurrentDay(request):
     approach = Approach.objects\
         .values('combination__exercise')\
         .filter(user=user)\
-        .filter(approach_date__date=datetime.date.today())\
+        .filter(approach_date__date=timezone.localdate())\
         .annotate(total=Sum('approach_value'))
     result = []
     for e in exercises:
@@ -78,7 +77,7 @@ def getReportSum(request, id_exercise):
         .values('combination__exercise__id') \
         .filter(user=user)\
         .filter(combination__exercise=id_exercise)\
-        .filter(approach_date__year=datetime.date.today().year, approach_date__month=datetime.date.today().month)\
+        .filter(approach_date__year=timezone.localdate().year, approach_date__month=timezone.localdate().month)\
         .annotate(total=Sum('approach_value'))
     if approach_current_month:
         result['currentMonth'] = approach_current_month[0]['total']

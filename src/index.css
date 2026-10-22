@@ -58,6 +58,28 @@ input[type=number] {
     top: 24px!important;
 }
 
+/* История: кнопки столбиком справа, текст - в оставшуюся ширину. Рядом по горизонтали
+   они закрывали на телефоне повторы и вес */
+.collection .collection-item.history-item {
+    padding-right: 64px;
+}
+
+.collection .collection-item.history-item .secondary-content,
+.collection .collection-item.history-item .third-content {
+    position: absolute;
+    right: 16px;
+    margin: 0;
+    padding: 0 10px;
+}
+
+.collection .collection-item.history-item .secondary-content {
+    top: 14px!important;
+}
+
+.collection .collection-item.history-item .third-content {
+    top: 56px!important;
+}
+
 /* место под кнопку удаления справа, иначе на узком экране она ложится на текст */
 .collection .collection-item.goal-item .title,
 .collection .collection-item.goal-item p {
