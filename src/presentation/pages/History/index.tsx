@@ -3,10 +3,12 @@ import { CollectionHistory, FilterHistory, Footer, Header, ModalHistory } from '
 import FloatingActionButton from 'presentation/components/Buttons/FloatingActionButton'
 import React, { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
-import { IApproach, RemoteHistoryModel, TColorHistory, TItem, TRemoveApproach } from 'domain/models'
+import { IApproach, RemoteHistoryModel, TColorHistory, TCombination, TItem, TRemoveApproach, TUpdateApproach } from 'domain/models'
 import Spinner from 'presentation/components/FormLoaderStatus/Spinner'
+import { IValidation } from 'presentation/protocols/validation'
 
 type HistoryProps = {
+    validation: IValidation
     remoteHistory: RemoteHistory
 }
 
@@ -15,7 +17,7 @@ interface stateHistory {
     mainError: string
 }
 
-const History: React.FC<HistoryProps> = ({remoteHistory}: HistoryProps) => {
+const History: React.FC<HistoryProps> = ({validation, remoteHistory}: HistoryProps) => {
 
     // M.AutoInit() здесь не вызываем: на каждом рендере он заново инициализировал
     // все селекты, календари и модалки страницы. Виджеты инициализируют свои компоненты.
@@ -27,6 +29,7 @@ const History: React.FC<HistoryProps> = ({remoteHistory}: HistoryProps) => {
 
     const [approaches, setApproaches] = useState<IApproach[]>([])
     const [listExercises, setListExercises] = useState<TItem[]>([])
+    const [listCombinations, setListCombinations] = useState<TCombination[]>([])
     // Номер применённого фильтра: по его смене список возвращается на первую страницу
     const [filterVersion, setFilterVersion] = useState(0)
     // Модалка одна - для подхода, который открыли на редактирование
@@ -56,6 +59,28 @@ const History: React.FC<HistoryProps> = ({remoteHistory}: HistoryProps) => {
         setFilterVersion(filterVersion + 1)
     }
 
+    // true - сохранено; ошибку показываем тостом, окно остаётся открытым
+    const updateApproach = async (params: TUpdateApproach): Promise<boolean> => {
+        try {
+            setState({...state, isLoading: true})
+
+            const updated = await remoteHistory.update(params)
+
+            // Видимость не пересчитываем: запись остаётся на месте до следующего поиска
+            setApproaches(approaches.map(a => a.id === updated.id ? {...updated, visible: a.visible} : a))
+            setState({...state, isLoading: false})
+            toast.success('Success update', {theme: 'colored'})
+            return true
+        } catch (error: any) {
+            setState({
+                ...state,
+                isLoading: false,
+                mainError: error.message
+            })
+            return false
+        }
+    }
+
     const removeApproach = async (params: TRemoveApproach): Promise<void> => {
         try {
             setState({...state, isLoading: true})
@@ -81,6 +106,7 @@ const History: React.FC<HistoryProps> = ({remoteHistory}: HistoryProps) => {
             .then((response: RemoteHistoryModel) => {
                 setApproaches(response.approaches)
                 setListExercises(getExercises(response.exercises))
+                setListCombinations(response.combinations)
                 setState({...state, isLoading: false, mainError: ''})
             })
             .catch((e: Error) => {
@@ -116,7 +142,14 @@ const History: React.FC<HistoryProps> = ({remoteHistory}: HistoryProps) => {
                         {state.isLoading && <Spinner />}
                         {listExercises.length !== 0 && <FilterHistory arrayExercises={listExercises} filterApproaches={filterApproaches} />}
                         {listExercises.length !== 0 && <CollectionHistory arrayApproaches={approaches} arrayExercises={listExercises} removeApproach={removeApproach} editApproach={setEditApproach} filterVersion={filterVersion} />}
-                        {editApproach && <ModalHistory key={editApproach.id} approache={editApproach} arrayExercises={listExercises} />}
+                        {editApproach && <ModalHistory
+                                            key={editApproach.id}
+                                            approache={editApproach}
+                                            arrayExercises={listExercises}
+                                            arrayCombinations={listCombinations}
+                                            validation={validation}
+                                            updateApproach={updateApproach}
+                                        />}
                     </div>
 
                 </div>

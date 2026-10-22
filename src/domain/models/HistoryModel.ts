@@ -27,7 +27,18 @@ export interface IApproach {
     visible: boolean
 }
 
+export type TUpdateApproach = {
+    id: number
+    combination: number
+    // 'YYYY-MM-DD'; время подхода сервер оставляет прежним
+    date: string
+    value: number
+    weight: number
+}
+
 export interface RemoteHistoryModel {
     exercises: TItem[]
     approaches: IApproach[]
+    // все комбинации упражнений - для выбора варианта при редактировании
+    combinations: TCombination[]
 }

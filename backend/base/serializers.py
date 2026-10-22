@@ -66,6 +66,18 @@ class ReportCurrentDaySerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'total']
 
 
+def history_combination(combination):
+    # Комбинация в истории - части с id и названием (TCombination на фронтенде).
+    # Словарём, а не вложенным сериализатором: в истории тысячи подходов
+    return {
+        'id': combination.id,
+        'exercise': {'id': combination.exercise.id, 'name': combination.exercise.name},
+        'grip': {'id': combination.grip.id, 'name': combination.grip.name},
+        'arm': {'id': combination.arm_width.id, 'name': combination.arm_width.name},
+        'equipment': {'id': combination.equipment.id, 'name': combination.equipment.name} if combination.equipment else None,
+    }
+
+
 class HistorySerializer(serializers.ModelSerializer):
     combination = serializers.SerializerMethodField(read_only=False)
     value = serializers.IntegerField(source='approach_value')
@@ -78,13 +90,7 @@ class HistorySerializer(serializers.ModelSerializer):
         fields = ['id', 'date', 'value', 'weight', 'combination', 'visible']
 
     def get_combination(self, obj):
-        return {
-            'id': obj.combination.id,
-            'exercise': {'id': obj.combination.exercise.id, 'name': obj.combination.exercise.name},
-            'grip': {'id': obj.combination.grip.id, 'name': obj.combination.grip.name},
-            'arm': {'id': obj.combination.arm_width.id, 'name': obj.combination.arm_width.name},
-            'equipment': {'id': obj.combination.equipment.id, 'name': obj.combination.equipment.name} if obj.combination.equipment else None,
-        }
+        return history_combination(obj.combination)
 
     def get_date(self, obj):
         return obj.approach_date.date()

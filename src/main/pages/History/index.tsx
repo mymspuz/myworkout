@@ -2,6 +2,7 @@ import { makeHistory } from 'main/factories/history'
 import { AccountContext } from 'presentation/hooks'
 import React, {useContext} from 'react'
 import History from 'presentation/pages/History'
+import { makeHistoryValidation } from './HistoryValidation'
 
 const MakeHistory: React.FC = () => {
     const { getCurrentAccount } = useContext(AccountContext)
@@ -9,10 +10,11 @@ const MakeHistory: React.FC = () => {
     if (getCurrentAccount) {
         const { access, refresh } = getCurrentAccount()
         const remoteHistory = makeHistory(access, refresh)
-        // const validationComposite = makeWeightValidation()
+        const validationComposite = makeHistoryValidation()
 
         return (
             <History
+                validation={validationComposite}
                 remoteHistory={remoteHistory}
             />
         )

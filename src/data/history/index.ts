@@ -1,7 +1,7 @@
 import { HttpHeader, HttpStatusCode, IHttpClient } from 'data/protocols/http'
 import { InvalidCredentialsError, UnexpectedError } from 'domain/errors'
 import { IHistory } from 'domain/history'
-import { RemoteHistoryModel, TRemoveApproach } from 'domain/models/HistoryModel'
+import { IApproach, RemoteHistoryModel, TRemoveApproach, TUpdateApproach } from 'domain/models/HistoryModel'
 
 export class RemoteHistory implements IHistory {
     constructor(
@@ -14,6 +14,24 @@ export class RemoteHistory implements IHistory {
         const httpResponse = await this.httpHistoryClient.request({
             url: this.url,
             method: 'get',
+            headers: this.headerAuthorization.headers
+        })
+
+        switch (httpResponse.statusCode) {
+            case HttpStatusCode.ok:
+                return httpResponse.body
+            case HttpStatusCode.unauthorized:
+                throw new InvalidCredentialsError()
+            default:
+                throw new UnexpectedError()
+        }
+    }
+
+    async update(params: TUpdateApproach): Promise<IApproach> {
+        const httpResponse = await this.httpHistoryClient.request({
+            url: `${this.url}update/`,
+            method: 'put',
+            body: params,
             headers: this.headerAuthorization.headers
         })
 

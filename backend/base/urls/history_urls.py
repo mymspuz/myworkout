@@ -5,5 +5,6 @@ from ..views import history_views as views
 
 urlpatterns = [
     path('', views.getHistory, name='history'),
+    path('update/', views.updateApproach, name='update_history'),
     path('remove/', views.removeApproach, name='remove_history'),
 ]
