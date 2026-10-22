@@ -7,11 +7,11 @@ type CollectionHistoryProps = {
     arrayApproaches: IApproach[]
     arrayExercises: TItem[]
     removeApproach(params: TRemoveApproach): Promise<void>
+    editApproach(approach: IApproach): void
+    filterVersion: number
 }
 
-const CollectionHistory: React.FC<CollectionHistoryProps> = ({arrayApproaches, arrayExercises, removeApproach}: CollectionHistoryProps) => {
-
-    M.AutoInit()
+const CollectionHistory: React.FC<CollectionHistoryProps> = ({arrayApproaches, arrayExercises, removeApproach, editApproach, filterVersion}: CollectionHistoryProps) => {
 
     const [collection, setCollection] = useState<IApproach[]>([])
     const [displayApproaches, setDisplayApproaches] = useState<JSX.Element[]>([])
@@ -42,8 +42,8 @@ const CollectionHistory: React.FC<CollectionHistoryProps> = ({arrayApproaches, a
                             {e.combination.equipment && (' (' + e.combination.equipment.name + ')')}
                         </p>
                         <button
-                            className="btn secondary-content modal-trigger"
-                            data-target={"modal" + e.id}
+                            className="btn secondary-content"
+                            onClick={() => editApproach(e)}
                         >
                             <i className="material-icons">create</i>
                         </button>
@@ -70,6 +70,18 @@ const CollectionHistory: React.FC<CollectionHistoryProps> = ({arrayApproaches, a
         setCollection(result)
     }, [arrayApproaches])
 
+    // Новый фильтр - с первой страницы, иначе со страницы 300 из 533 после фильтра ничего не видно
+    useEffect(() => {
+        setPage(0)
+    }, [filterVersion])
+
+    // После удаления последней записи на последней странице - шаг назад
+    useEffect(() => {
+        if (page > 0 && page >= totalPages) {
+            setPage(Math.max(0, totalPages - 1))
+        }
+    }, [totalPages])
+
     return (
         <>
             <div className="col s12 m10 offset-m1">
@@ -80,6 +92,7 @@ const CollectionHistory: React.FC<CollectionHistoryProps> = ({arrayApproaches, a
                     previousLabel={<i className="material-icons">chevron_left</i>}
                     nextLabel={<i className="material-icons">chevron_right</i>}
                     pageCount={totalPages}
+                    forcePage={page}
                     onPageChange={changePage}
                     containerClassName={"pagination"}
                     previousLinkClassName={"previousButton"}

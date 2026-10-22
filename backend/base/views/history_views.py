@@ -16,8 +16,12 @@ def getHistory(request):
     exercises = Exercises.objects.all().order_by('id')
     serializer_ex = ExercisesSerializer(exercises, many=True)
 
+    # HistorySerializer обращается к комбинации и всем её частям - без select_related
+    # это несколько запросов на каждый подход (тысячи запросов и секунды на ответ)
     approaches = Approach.objects \
         .filter(user=user) \
+        .select_related('combination__exercise', 'combination__grip',
+                        'combination__arm_width', 'combination__equipment') \
         .order_by('-approach_date')
 
     serializer_ap = HistorySerializer(approaches, many=True)

@@ -1,78 +1,71 @@
 import { TItem } from 'domain/models'
-import { FormContext } from 'presentation/hooks'
-import React, { useEffect, useState } from 'react'
-import { Input, Select } from '..'
+import React, { useEffect, useRef } from 'react'
+import M from 'materialize-css'
 
 type FilterHistoryProps = {
     arrayExercises: TItem[]
-    filterApproaches: any
+    filterApproaches(exercises: number[], date: string): void
 }
 
 const FilterHistory: React.FC<FilterHistoryProps> = ({arrayExercises, filterApproaches}: FilterHistoryProps) => {
 
-    const [state, setState] = useState({
-        isFormInvalid: true,
-        date: '',
-        dateError: '',
-        exercises: [],
-        exercisesError: ''
-    })
+    const selectRef = useRef<HTMLSelectElement>(null)
+    const dateRef = useRef<HTMLInputElement>(null)
 
-    const [datepicker, setDatepicker] = useState<any>()
-
-    function handleSearch() {
-        const select = document.querySelector('select')
-        const datepickerAll = document.querySelectorAll('.datepicker')
-        M.Datepicker.init(datepickerAll, {})
-
-        let resultDate = ''
-        if (datepicker[0]['el']['value']) {
-            const day = datepicker[0]['el']['value'].substr(4, 2)
-            let month = datepicker[0]['calendars'][0]['month']
-            if (month < 10) month = '0' + month
-            const year = datepicker[0]['calendars'][0]['year']
-            resultDate = `${year}-${month}-${day}`
-        }
-        // @ts-ignore
-        setState({...state, exercises: Array.from(select.selectedOptions, option => option.value), date: resultDate})
-    }
-
+    // Виджеты Materialize создаём один раз и читаем значения прямо из элементов:
+    // пересоздание на каждый поиск оставляло в руках уничтоженный экземпляр календаря
     useEffect(() => {
-        const selectAll = document.querySelectorAll('select')
-        const datepickerAll = document.querySelectorAll('.datepicker')
-        M.FormSelect.init(selectAll, {})
-        const init = M.Datepicker.init(datepickerAll, {})
-        setDatepicker(init)
+        if (!selectRef.current || !dateRef.current) {
+            return
+        }
+        const select = M.FormSelect.init(selectRef.current, {})
+        // Формат совпадает с датой подхода из API - значение поля сравнивается как есть
+        const datepicker = M.Datepicker.init(dateRef.current, {
+            format: 'yyyy-mm-dd',
+            autoClose: true,
+            showClearBtn: true,
+            firstDay: 1
+        })
+        return () => {
+            select.destroy()
+            datepicker.destroy()
+        }
     }, [])
 
-    useEffect(() => {
-        if (state.exercises.length) {
-            filterApproaches(state.exercises.map(e => (e !== 'DEFAULT') ? Number(e) : 0), state.date)
+    function handleSearch() {
+        if (!selectRef.current || !dateRef.current) {
+            return
         }
-    }, [state.date, state.exercises])
+        // Пункт-подсказка disabled и без числового value - в фильтр не попадает
+        const exercises = Array.from(selectRef.current.selectedOptions)
+            .map(option => Number(option.value))
+            .filter(id => id > 0)
+        filterApproaches(exercises, dateRef.current.value)
+    }
 
     return (
-        <FormContext.Provider value={{state, setState}}>
-            <div className="col s12 m6">
-                <Select
-                    title='Выберите упражнение'
-                    name='exercises'
-                    multiple={true}
-                    defaultValue={['DEFAULT']}
-                    options={arrayExercises}
-                />
+        <>
+            <div className="input-field col s12 m6">
+                <select ref={selectRef} className="no-autoinit" multiple defaultValue={['DEFAULT']}>
+                    <option value="DEFAULT" disabled>Все упражнения</option>
+                    {arrayExercises.map(e => <option key={e.id} value={e.id}>{e.name}</option>)}
+                </select>
+                <label>Упражнения</label>
             </div>
             <div className="input-field col s12 m6">
                 <input
+                    ref={dateRef}
                     id="datefilter"
                     type="text"
-                    className="datepicker"
+                    className="datepicker no-autoinit"
+                    placeholder="Любая дата"
                 />
+                <label htmlFor="datefilter" className="active">Дата</label>
             </div>
             <div className="col s12 m6 offset-m3 center" style={{marginBottom: '15px'}}>
-                <a className="waves-effect waves-light btn" onClick={handleSearch}><i className="material-icons">done_all</i>Поиск</a>
+                <button type="button" className="waves-effect waves-light btn" onClick={handleSearch}><i className="material-icons left">done_all</i>Поиск</button>
             </div>
-        </FormContext.Provider>
+        </>
     )
 }
 

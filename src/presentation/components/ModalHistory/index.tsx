@@ -1,6 +1,7 @@
 import { IApproach, TItem } from 'domain/models'
 import { FormContext } from 'presentation/hooks'
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
+import M from 'materialize-css'
 import { Input } from '..'
 
 type ModalHistoryProps = {
@@ -17,18 +18,35 @@ const ModalHistory: React.FC<ModalHistoryProps> = ({approache, arrayExercises}: 
         weightingError: ''
     })
 
+    const selectRef = useRef<HTMLSelectElement>(null)
+    const dateRef = useRef<HTMLInputElement>(null)
+
+    // Раньше модалки инициализировал M.AutoInit() на странице; теперь модалка одна и сама
+    useEffect(() => {
+        if (!selectRef.current || !dateRef.current) {
+            return
+        }
+        const select = M.FormSelect.init(selectRef.current, {})
+        const datepicker = M.Datepicker.init(dateRef.current, {format: 'yyyy-mm-dd', autoClose: true})
+        return () => {
+            select.destroy()
+            datepicker.destroy()
+        }
+    }, [])
+
     return (
         <div id={"modal" + approache.id} className="modal">
             <div className="modal-content">
                 <FormContext.Provider value={{state, setState}}>
-                <form action="#" className="col s12 m10 offset-m1">
+                <form className="col s12 m10 offset-m1" onSubmit={e => e.preventDefault()}>
                     <div className="row">
                         <div className="col s6 offset-3">
                             <div className="input-field col s12 m6">
                                 <input
-                                    id="datefilter"
+                                    ref={dateRef}
                                     type="text"
-                                    className="datepicker"
+                                    className="datepicker no-autoinit"
+                                    defaultValue={approache.date}
                                 />
                             </div>
                         </div>
@@ -36,7 +54,7 @@ const ModalHistory: React.FC<ModalHistoryProps> = ({approache, arrayExercises}: 
                     <div className="row">
                         <div className="input-field col s6 offset-3">
                             <div className="input-field col s12">
-                                <select defaultValue={approache.combination.exercise.id}>
+                                <select ref={selectRef} className="no-autoinit" defaultValue={approache.combination.exercise.id}>
                                     {arrayExercises.map(e => <option key={e.id} value={e.id}>{e.name}</option>)}
                                 </select>
                             </div>
@@ -66,8 +84,9 @@ const ModalHistory: React.FC<ModalHistoryProps> = ({approache, arrayExercises}: 
                             />
                         </div>
                     </div>
-                    <button className="btn modal-close" style={{marginRight: '10px'}}>Сохранить</button>
-                    <button className="btn modal-close red">Отмена</button>
+                    {/* Сохранение не реализовано: кнопка только закрывает окно, как и раньше */}
+                    <button type="button" className="btn modal-close" style={{marginRight: '10px'}}>Сохранить</button>
+                    <button type="button" className="btn modal-close red">Отмена</button>
                 </form>
                 </FormContext.Provider>
             </div>
