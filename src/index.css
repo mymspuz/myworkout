@@ -57,3 +57,10 @@ input[type=number] {
 .collection .collection-item.avatar .third-content {
     top: 24px!important;
 }
+
+/* место под кнопку удаления справа, иначе на узком экране она ложится на текст */
+.collection .collection-item.goal-item .title,
+.collection .collection-item.goal-item p {
+    display: block;
+    padding-right: 60px;
+}

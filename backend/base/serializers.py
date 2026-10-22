@@ -91,3 +91,29 @@ class HistorySerializer(serializers.ModelSerializer):
 
     def get_visible(self, obj):
         return True
+
+
+class GoalSerializer(serializers.ModelSerializer):
+    """
+    Цель с прогрессом за текущий месяц.
+    В context ожидаются done - {id упражнения: сумма повторов за месяц}
+    и month_part - доля месяца, прошедшая к концу сегодняшнего дня.
+    """
+    exercise = serializers.SerializerMethodField(read_only=True)
+    value = serializers.IntegerField(source='goal_value')
+    done = serializers.SerializerMethodField(read_only=True)
+    plan = serializers.SerializerMethodField(read_only=True)
+
+    class Meta:
+        model = Goal
+        fields = ['id', 'exercise', 'value', 'done', 'plan']
+
+    def get_exercise(self, obj):
+        return {'id': obj.exercise.id, 'name': obj.exercise.name}
+
+    def get_done(self, obj):
+        return self.context['done'].get(obj.exercise.id, 0)
+
+    def get_plan(self, obj):
+        # Сколько должно быть сделано к концу сегодняшнего дня при равномерном темпе
+        return round(obj.goal_value * self.context['month_part'])

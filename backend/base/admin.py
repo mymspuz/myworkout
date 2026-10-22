@@ -51,6 +51,10 @@ class WeightAdmin(admin.ModelAdmin):
     list_display = ('weight_date', 'weight_value', 'user', )
 
 
+class GoalAdmin(admin.ModelAdmin):
+    list_display = ('goal_year', 'goal_month', 'exercise', 'goal_value', 'user', )
+
+
 admin.site.register(Exercises)
 admin.site.register(Grip)
 admin.site.register(ArmWidth)
@@ -58,4 +62,5 @@ admin.site.register(Equipment)
 admin.site.register(Combinations, CombinationsAdmin)
 admin.site.register(Weight, WeightAdmin)
 admin.site.register(Approach, ApproachAdmin)
+admin.site.register(Goal, GoalAdmin)
 

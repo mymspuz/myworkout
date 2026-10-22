@@ -9,3 +9,5 @@ export const URL_WEIGHT = 'weights/'
 export const URL_REPORT = 'reports/'
 
 export const URL_HISTORY = 'history/'
+
+export const URL_GOALS = 'goals/'

@@ -16,6 +16,7 @@ import MakeWeight from 'main/pages/Weight'
 import MakeCombination from 'main/pages/Combination'
 import MakeReport from 'main/pages/Reports'
 import MakeHistory from 'main/pages/History'
+import MakeGoals from 'main/pages/Goals'
 
 const MainRouter: React.FC = () => {
 
@@ -37,6 +38,7 @@ const MainRouter: React.FC = () => {
                         <Route path='/weights' element={<PrivateRoute><MakeWeight /></PrivateRoute>} />
                         <Route path='/reports' element={<PrivateRoute><MakeReport /></PrivateRoute>} />
                         <Route path='/history' element={<PrivateRoute><MakeHistory /></PrivateRoute>} />
+                        <Route path='/goals' element={<PrivateRoute><MakeGoals /></PrivateRoute>} />
                         <Route path='/exercises/:exerciseId' element={<PrivateRoute><MakeCombination /></PrivateRoute>}/>
                     </Routes>
                 </BrowserRouter>

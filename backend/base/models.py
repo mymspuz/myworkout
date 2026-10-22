@@ -89,3 +89,23 @@ class Approach(models.Model):
     class Meta:
         verbose_name = 'Повтор'
         verbose_name_plural = 'Повторы'
+
+
+class Goal(models.Model):
+    # Цель действует только в своём месяце: даты нет, есть год и месяц.
+    # Цели прошедших месяцев удаляются при запросе списка (goal_views.getGoals)
+    exercise = models.ForeignKey(Exercises, on_delete=models.PROTECT, verbose_name='Упражнение')
+    goal_value = models.PositiveIntegerField(verbose_name='Цель на месяц')
+    goal_year = models.PositiveSmallIntegerField(verbose_name='Год')
+    goal_month = models.PositiveSmallIntegerField(verbose_name='Месяц')
+    user = models.ForeignKey(User, on_delete=models.PROTECT, verbose_name='Пользователь')
+
+    def __str__(self):
+        return f'{self.exercise} / {self.goal_value} ({self.goal_month}.{self.goal_year})'
+
+    class Meta:
+        verbose_name = 'Цель'
+        verbose_name_plural = 'Цели'
+        constraints = [
+            models.UniqueConstraint(fields=['user', 'exercise', 'goal_year', 'goal_month'], name='One goal per month')
+        ]

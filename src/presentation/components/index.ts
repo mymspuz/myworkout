@@ -7,5 +7,7 @@ export { default as FilterHistory } from './FilterHistory'
 export { default as ModalHistory } from './ModalHistory'
 export { default as CollectionHistory } from './CollectionHistory'
 
+export { default as CollectionGoals } from './CollectionGoals'
+
 export { default as Header } from './bloks/Header'
 export { default as Footer } from './bloks/Footer'

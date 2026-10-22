@@ -15,6 +15,7 @@ urlpatterns = [
     path('api/weights/', include('base.urls.weight_urls')),
     path('api/reports/', include('base.urls.report_urls')),
 	path('api/history/', include('base.urls.history_urls')),
+    path('api/goals/', include('base.urls.goal_urls')),
 
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
